@@ -35,7 +35,6 @@
                 android:id="@+id/category_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
                 android:alpha="0"
                 android:focusable="true">
 
@@ -45,8 +44,8 @@
                     android:layout_height="wrap_content"
                     android:focusable="true"
                     app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:selected_category_item="@{viewModel.selectedCategory}"
                     tools:listitem="@layout/category_item" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -55,7 +54,6 @@
                 android:id="@+id/content_holder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="40dp"
                 android:focusable="true">
 
                 <EditText
@@ -74,8 +72,10 @@
                     android:paddingEnd="20dp"
                     android:paddingBottom="14dp"
                     android:singleLine="true"
+                    android:text="@={viewModel.id}"
                     android:textSize="14dp"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:on_change="@{viewModel.onEditTextChanged}" />
 
                 <EditText
                     android:id="@+id/edit_text_email"
@@ -88,13 +88,16 @@
                     android:enabled="@{viewModel.editTextEnabled}"
                     android:hint="이메일"
                     android:imeOptions="actionNext"
+                    android:inputType="textEmailAddress"
                     android:paddingStart="20dp"
                     android:paddingTop="14dp"
                     android:paddingEnd="20dp"
                     android:paddingBottom="14dp"
                     android:singleLine="true"
+                    android:text="@={viewModel.email}"
                     android:textSize="14dp"
-                    app:layout_constraintTop_toBottomOf="@+id/edit_text_id" />
+                    app:layout_constraintTop_toBottomOf="@+id/edit_text_id"
+                    app:on_change="@{viewModel.onEditTextChanged}" />
 
                 <EditText
                     android:id="@+id/edit_text_password"
@@ -104,14 +107,15 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/login_edit_text_background"
-                    android:enabled="@{viewModel.editTextEnabled}"
                     android:hint="비밀번호"
                     android:imeOptions="actionNext"
+                    android:inputType="textPassword"
                     android:paddingStart="20dp"
                     android:paddingTop="14dp"
                     android:paddingEnd="20dp"
                     android:paddingBottom="14dp"
                     android:singleLine="true"
+                    android:text="@={viewModel.password}"
                     android:textSize="14dp"
                     app:layout_constraintTop_toBottomOf="@+id/edit_text_email" />
 
@@ -123,14 +127,15 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/login_edit_text_background"
-                    android:enabled="@{viewModel.editTextEnabled}"
                     android:hint="비밀번호 확인"
                     android:imeOptions="actionDone"
+                    android:inputType="textPassword"
                     android:paddingStart="20dp"
                     android:paddingTop="14dp"
                     android:paddingEnd="20dp"
                     android:paddingBottom="14dp"
                     android:singleLine="true"
+                    android:text="@={viewModel.passwordCheck}"
                     android:textSize="14dp"
                     app:layout_constraintTop_toBottomOf="@+id/edit_text_password" />
 
@@ -144,6 +149,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="33dp"
+            android:enabled="@{viewModel.buttonEnabled}"
             android:onClick="@{() -> viewModel.onButtonClick()}"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"

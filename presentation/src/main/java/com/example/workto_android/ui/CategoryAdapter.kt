@@ -41,15 +41,6 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
 
-        holder.holderLayout.setOnClickListener {
-            if (selectedCategory.contains(categoryItem[position])) {
-                selectedCategory.remove(categoryItem[position])
-            } else
-                selectedCategory.add(categoryItem[position])
-            categorySelector.selectCategory(categoryItem[position])
-            notifyItemChanged(position)
-        }
-
         if (selectedCategory.contains(categoryItem[position])) {
             setBackground(
                 R.drawable.category_select_background,
