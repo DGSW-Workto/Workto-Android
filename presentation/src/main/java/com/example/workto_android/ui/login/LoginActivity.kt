@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Window
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.example.domain.result.EventObserver
 import com.example.workto_android.R
 import com.example.workto_android.databinding.ActivityLoginBinding
 import com.example.workto_android.ui.BaseActivity
@@ -30,6 +31,18 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
         binding.buttonJoin.setOnClickListener {
             startActivity(Intent(this, JoinActivity::class.java))
         }
+
+        initObserver()
+    }
+
+    private fun initObserver() {
+        viewModel.error.observe(this, EventObserver {
+            makeToast(it, false)
+        })
+
+        viewModel.completeLogin.observe(this, EventObserver{
+            makeToast("로그인 성공", false)
+        })
     }
 
 

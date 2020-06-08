@@ -2,18 +2,22 @@ package com.example.workto_android.ui.login
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.login.JoinUseCase
 import com.example.domain.result.Event
 import com.example.model.Category
+import com.example.model.JoinParameter
 import com.example.workto_android.ui.BaseViewModel
 import com.example.workto_android.util.CategorySelector
 
-class JoinViewModel : BaseViewModel(), CategorySelector {
+class JoinViewModel(private val joinUseCase: JoinUseCase) : BaseViewModel(), CategorySelector {
 
     var isLastPage = false
 
     val id = ObservableField("")
     val email = ObservableField("")
+    val nickname = ObservableField("")
     val password = ObservableField("")
     val passwordCheck = ObservableField("")
     var isEquals = false
@@ -45,9 +49,35 @@ class JoinViewModel : BaseViewModel(), CategorySelector {
     val selectedCategory: LiveData<Pair<Int, ArrayList<Category>>>
         get() = _selectedCategory
 
+    private val joinResult = joinUseCase.observe()
+
+    private val _completeJoin = MediatorLiveData<Event<Unit>>()
+    val completeJoin: LiveData<Event<Unit>>
+        get() = _completeJoin
+
+    init {
+        joinResult.onSuccess(_completeJoin) {
+            _completeJoin.value = Event(Unit)
+        }
+
+        joinResult.onError(_error) {
+            _error.value = Event(it)
+        }
+    }
+
     fun onButtonClick() {
         if (isLastPage) {
-
+            this(
+                joinUseCase(
+                    JoinParameter(
+                        getSkills(),
+                        email.get()!!,
+                        id.get()!!,
+                        password.get()!!,
+                        nickname.get()!!
+                    )
+                )
+            )
         } else {
             setLast()
         }
@@ -90,7 +120,16 @@ class JoinViewModel : BaseViewModel(), CategorySelector {
     fun onEditTextChanged() {
         _buttonEnabled.value =
             id.get()!!.isNotBlank() && password.get()!!.isNotBlank() && email.get()!!
-                .isNotBlank() && passwordCheck.get()!!.isNotBlank() && isEquals
+                .isNotBlank() && nickname.get()!!.isNotBlank() && passwordCheck.get()!!
+                .isNotBlank() && isEquals
+    }
+
+    private fun getSkills(): ArrayList<String> {
+        return with(allSelectedCategory) {
+            ArrayList(
+                this.map { it.categoryName }
+            )
+        }
     }
 
 }

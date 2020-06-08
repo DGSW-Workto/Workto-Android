@@ -56,12 +56,16 @@ class JoinActivity : BaseActivity<JoinViewModel>() {
             makeToast(it, false)
         })
 
-        binding.editTextPassword.doOnTextChanged { text, start, count, after ->
+        viewModel.completeJoin.observe(this, EventObserver {
+            makeToast("회원가입 성공", false)
+        })
+
+            binding.editTextPassword.doOnTextChanged { _, _, _, _ ->
             checkEquals()
             viewModel.onEditTextChanged()
         }
 
-        binding.editTextPasswordCheck.doOnTextChanged { text, start, count, after ->
+        binding.editTextPasswordCheck.doOnTextChanged { _, _, _, _ ->
             checkEquals()
             viewModel.onEditTextChanged()
         }
