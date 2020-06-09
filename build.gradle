@@ -18,7 +18,7 @@ buildscript {
 
         //material
         flexbox = "2.0.1"
-        materialVersion='1.2.0-alpha06'
+        materialVersion='1.2.0-alpha02'
         constraintLayoutVersion ='2.0.0-beta6'
 
         //retrofit

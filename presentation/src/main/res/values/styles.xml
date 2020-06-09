@@ -5,9 +5,16 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item  name="android:windowActivityTransitions">true</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="bottomSheetDialogTheme">@android:color/transparent</item>
     </style>
+
+    <style name="MYBottomSheetStyle" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
     </style>

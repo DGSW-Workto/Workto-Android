@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import com.example.domain.TokenManager
 import com.example.domain.login.LoginUseCase
 import com.example.domain.result.Event
+import com.example.domain.result.Result
+import com.example.domain.token.SaveTokenUseCase
 import com.example.model.LoginParameter
 import com.example.workto_android.ui.BaseViewModel
 
-class LoginViewModel(private val loginUseCase: LoginUseCase) : BaseViewModel() {
+class LoginViewModel(private val loginUseCase: LoginUseCase, private val saveTokenUseCase: SaveTokenUseCase) : BaseViewModel() {
 
     val id = ObservableField("")
     val password = ObservableField("")
@@ -27,6 +29,11 @@ class LoginViewModel(private val loginUseCase: LoginUseCase) : BaseViewModel() {
 
     init {
         loginResult.onSuccess(_completeLogin) {
+            when (saveTokenUseCase(it.data.token)) {
+                is Result.Error -> {
+                    _error.value = Event("알 수 없는 에러 발생")
+                }
+            }
             TokenManager.token = it.data.token
             _completeLogin.value = Event(Unit)
         }

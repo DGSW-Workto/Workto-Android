@@ -101,7 +101,7 @@ class JoinActivity : BaseActivity<JoinViewModel>() {
 
 @BindingAdapter("on_change")
 fun onEditTextChanged(editText: EditText, lambda: () -> Unit) {
-    editText.doOnTextChanged { text, start, count, after ->
+    editText.doOnTextChanged { _, _, _, _ ->
         lambda()
     }
 }

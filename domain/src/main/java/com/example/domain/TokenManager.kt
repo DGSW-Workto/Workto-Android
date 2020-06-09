@@ -20,7 +20,7 @@ object TokenManager : KoinComponent {
         return Interceptor { chain ->
             val builder = chain.request().newBuilder()
             builder.addHeader(
-                "Authorization", token
+                "x-access-token", token
             )
             return@Interceptor chain.proceed(builder.build())
         }

@@ -9,7 +9,7 @@ import com.example.domain.result.EventObserver
 import com.example.workto_android.R
 import com.example.workto_android.databinding.ActivityLoginBinding
 import com.example.workto_android.ui.BaseActivity
-import com.google.android.material.transition.MaterialSharedAxis
+import com.example.workto_android.ui.main.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : BaseActivity<LoginViewModel>() {
@@ -42,6 +42,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
         viewModel.completeLogin.observe(this, EventObserver{
             makeToast("로그인 성공", false)
+            startActivity(Intent(this, MainActivity::class.java))
         })
     }
 

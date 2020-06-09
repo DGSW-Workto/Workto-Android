@@ -75,7 +75,8 @@
                     android:text="@={viewModel.id}"
                     android:textSize="14dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:on_change="@{viewModel.onEditTextChanged}" />
+                    app:on_change="@{viewModel.onEditTextChanged}"
+                    android:autofillHints="" />
 
                 <EditText
                     android:id="@+id/edit_text_nickname"
