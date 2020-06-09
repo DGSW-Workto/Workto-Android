@@ -127,7 +127,7 @@ class JoinViewModel(private val joinUseCase: JoinUseCase) : BaseViewModel(), Cat
     private fun getSkills(): ArrayList<String> {
         return with(allSelectedCategory) {
             ArrayList(
-                this.map { it.categoryName }
+                this.map { it.categoryId }
             )
         }
     }
