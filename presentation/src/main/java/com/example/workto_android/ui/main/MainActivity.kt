@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import com.example.domain.result.EventObserver
 import com.example.workto_android.R
 import com.example.workto_android.databinding.ActivityMainBinding
 import com.example.workto_android.ui.BaseActivity
@@ -21,10 +22,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).apply {
-            viewModel = this@MainActivity.viewModel
-            lifecycleOwner = this@MainActivity
-        }
+        binding = DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+            .apply {
+                viewModel = this@MainActivity.viewModel
+                lifecycleOwner = this@MainActivity
+            }
 
         binding.bottomAppBar.setNavigationOnClickListener {
             mainMenuFragment.show(supportFragmentManager, mainMenuFragment.tag)
@@ -34,6 +36,21 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     private fun initObserver() {
+        viewModel.navigateToCreateTeam.observe(this, EventObserver {
+
+        })
+
+        viewModel.navigateToMyPage.observe(this, EventObserver {
+
+        })
+
+        viewModel.navigateToMyPost.observe(this, EventObserver {
+
+        })
+
+        viewModel.navigateToWritePost.observe(this, EventObserver {
+
+        })
 
     }
 

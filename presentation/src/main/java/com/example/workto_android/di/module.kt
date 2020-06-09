@@ -12,6 +12,10 @@ import com.example.data.token.TokenApi
 import com.example.data.token.TokenDataMapper
 import com.example.data.token.TokenRemoteDataSource
 import com.example.data.token.TokenRepositoryImpl
+import com.example.data.user.UserApi
+import com.example.data.user.UserDataMapper
+import com.example.data.user.UserRemoteDataSource
+import com.example.data.user.UserRepositoryImpl
 import com.example.domain.login.LoginRepository
 import com.example.domain.TokenManager
 import com.example.domain.login.JoinUseCase
@@ -22,6 +26,8 @@ import com.example.domain.token.CheckTokenUseCase
 import com.example.domain.token.GetTokenUseCase
 import com.example.domain.token.SaveTokenUseCase
 import com.example.domain.token.TokenRepository
+import com.example.domain.user.GetUserDataUseCase
+import com.example.domain.user.UserRepository
 import com.example.workto_android.ui.login.JoinViewModel
 import com.example.workto_android.ui.login.LoginViewModel
 import com.example.workto_android.ui.main.MainMenuFragment
@@ -56,26 +62,32 @@ val retrofit: Retrofit = Retrofit
 
 private val loginApi = retrofit.create(LoginApi::class.java)
 private val tokenAPi = retrofit.create(TokenApi::class.java)
+private val userApi = retrofit.create(UserApi::class.java)
+
 
 val networkModule = module {
     factory { loginApi }
     factory { tokenAPi }
+    factory { userApi }
 }
 
 val dataSourceModule = module {
     factory { LoginRemoteDataSource(get()) }
     factory { TokenRemoteDataSource(get()) }
+    factory { UserRemoteDataSource(get()) }
 }
 
 val mapperModule = module {
     factory { CommonMessageMapper() }
     factory { LoginDataMapper() }
     factory { TokenDataMapper() }
+    factory { UserDataMapper() }
 }
 
 val repositoryModule = module {
     factory<LoginRepository> { LoginRepositoryImpl(get(), get(), get()) }
     factory<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
+    factory<UserRepository> { UserRepositoryImpl(get(), get()) }
 }
 
 val useCaseModule = module {
@@ -85,13 +97,14 @@ val useCaseModule = module {
     factory { SaveTokenUseCase(get()) }
     factory { CheckTokenUseCase(get()) }
     factory { GetNetworkStateUseCase(get()) }
+    factory { GetUserDataUseCase(get()) }
 }
 
 val viewModelModule = module {
     factory { LoginViewModel(get(), get()) }
     factory { JoinViewModel(get()) }
     factory { SplashViewModel(get(), get(), get()) }
-    factory { MainViewModel() }
+    factory { MainViewModel(get()) }
 }
 
 
