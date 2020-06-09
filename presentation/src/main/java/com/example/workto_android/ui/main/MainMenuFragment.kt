@@ -22,6 +22,11 @@ class MainMenuFragment : BottomSheetDialogFragment() {
     private lateinit var binding: MainMenuBinding
     private val viewModel by sharedViewModel<MainViewModel>()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
