@@ -37,6 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#595ffe"
+            android:onClick="@{() -> viewModel.openSearchHolder()}"
             android:src="@drawable/ic_search"
             app:layout_anchor="@id/bottom_app_bar"
             app:tint="@android:color/white" />
@@ -51,8 +52,7 @@
             android:focusable="true"
             app:behavior_hideable="true"
             app:behavior_peekHeight="0dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            app:layout_constraintTop_toBottomOf="parent">
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
             <androidx.cardview.widget.CardView
@@ -61,6 +61,7 @@
                 android:layout_height="7dp"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="#d5d5d5"
+                app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -73,7 +74,10 @@
                 android:layout_marginTop="35dp"
                 android:layout_marginEnd="15dp"
                 android:hint="검색어를 입력해주세요"
-                android:paddingEnd="20dp"
+                android:imeOptions="actionDone"
+                android:paddingEnd="50dp"
+                android:singleLine="true"
+                android:text="@={viewModel.searchWord}"
                 android:textColor="#afafaf"
                 android:textSize="15dp"
                 app:layout_constraintTop_toBottomOf="@+id/header" />
@@ -85,10 +89,105 @@
                 android:layout_marginBottom="5dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:onClick="@{() -> viewModel.clearSearchWord()}"
                 android:src="@drawable/ic_close"
                 app:layout_constraintBottom_toBottomOf="@+id/edit_text_search"
                 app:layout_constraintEnd_toEndOf="@+id/edit_text_search"
                 app:layout_constraintTop_toTopOf="@+id/edit_text_search" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/button_post"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/search_toggle_off_background"
+                android:elevation="3dp"
+                android:onClick="@{() -> viewModel.toggleSearchMode()}"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toStartOf="@+id/button_team"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_search"
+                app:text="@{textViewPost}"
+                app:toggle="@{viewModel.searchByPost}">
+
+                <TextView
+                    android:id="@+id/text_view_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="포스터 찾기"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/button_team"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/search_toggle_on_background"
+                android:elevation="3dp"
+                android:onClick="@{() -> viewModel.toggleSearchMode()}"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button_post"
+                app:layout_constraintTop_toBottomOf="@+id/edit_text_search"
+                app:text="@{textViewTeam}"
+                app:toggle="@{viewModel.searchByTeam}">
+
+                <TextView
+                    android:id="@+id/text_view_team"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="팀 찾기"
+                    android:textColor="#ffffff"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/category_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/main_category_holder_background"
+                android:paddingTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/button_post">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@+id/button_search"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:selected_category_item="@{viewModel.selectedCategory}"
+                    tools:listitem="@layout/category_item" />
+
+                <Button
+                    android:id="@+id/button_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="15dp"
+                    android:onClick="@{() -> viewModel.executeSearch()}"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp"
+                    android:text="선택한 조건으로 검색"
+                    android:textColor="#ffffff"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
