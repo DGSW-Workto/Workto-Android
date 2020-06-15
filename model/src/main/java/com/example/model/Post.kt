@@ -5,5 +5,6 @@ data class Post(
     val group_id: Int,
     val create_data: String,
     val title: String,
-    val content: String
+    val content: String,
+    val count: String
 )

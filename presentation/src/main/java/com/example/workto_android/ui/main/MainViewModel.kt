@@ -4,16 +4,19 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.domain.post.GetPostListUseCase
 import com.example.domain.result.Event
 import com.example.domain.user.GetUserDataUseCase
 import com.example.model.Category
+import com.example.model.Post
+import com.example.model.PostData
 import com.example.model.UserData
 import com.example.workto_android.R
 import com.example.workto_android.ui.BaseViewModel
 import com.example.workto_android.util.CategorySelector
 import com.example.workto_android.util.UserDataManager
 
-class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseViewModel(),
+class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase, private val getPostListUseCase: GetPostListUseCase) : BaseViewModel(),
     CategorySelector {
 
     val searchWord = ObservableField("")
@@ -22,14 +25,13 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
     val userData: LiveData<UserData>
         get() = _userData
 
-    private val _searchByTeam = MutableLiveData(true)
+    private val _searchByTeam = MutableLiveData(false)
     val searchByTeam: LiveData<Boolean>
         get() = _searchByTeam
 
-    private val _searchByPost = MutableLiveData(false)
+    private val _searchByPost = MutableLiveData(true)
     val searchByPost: LiveData<Boolean>
         get() = _searchByPost
-
 
     private val _navigateToCreateTeam = MutableLiveData<Event<Unit>>()
     val navigateToCreateTeam: LiveData<Event<Unit>>
@@ -47,6 +49,10 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
     val navigateToMyPost: LiveData<Event<Unit>>
         get() = _navigateToMyPost
 
+    private val _navigateToPostDetail = MutableLiveData<Event<Int>>()
+    val navigateToPostDetail: LiveData<Event<Int>>
+        get() = _navigateToPostDetail
+
     private val _bottomSheetState = MutableLiveData<Boolean>(false)
     val bottomSheetState: LiveData<Boolean>
         get() = _bottomSheetState
@@ -58,7 +64,16 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
     private val allSelectedCategory = arrayListOf<Category>()
     val categoryList: ArrayList<Category> = Category.values().toCollection(ArrayList())
 
+    private val allPostList = ArrayList<Post>()
+
+    private val _postList = MediatorLiveData<PostData>()
+    val postList:LiveData<PostData>
+        get() = _postList
+
+    private val getPostListResult = getPostListUseCase.observe()
+
     init {
+        executeSearch(1)
 
         this(getUserDataUseCase(Unit))
 
@@ -68,8 +83,23 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
         }
 
         getUserDataUseCase.observe().onError(_error) {
-
+            _error.value = Event(it)
         }
+
+        getPostListResult.onSuccess(_postList) {
+            allPostList.addAll(it.data.posts)
+            it.data.posts.clear()
+            it.data.posts.addAll(allPostList)
+            _postList.value = it.data!!
+        }
+
+        getPostListResult.onError(_error) {
+            _error.value = Event(it)
+        }
+    }
+
+    fun navigateToPostDetail(id: Int) {
+        _navigateToPostDetail.value = Event(id)
     }
 
     fun openSearchHolder() {
@@ -90,8 +120,9 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
         }
     }
 
-    fun executeSearch() {
+    fun executeSearch(page: Int) {
         _bottomSheetState.value = false
+        this(getPostListUseCase(page))
     }
 
     private fun navigateTo(navigate: MutableLiveData<Event<Unit>>) {

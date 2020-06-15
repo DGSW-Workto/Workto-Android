@@ -1,8 +1,6 @@
 package com.example.workto_android.ui.main
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +29,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainMenuFragment by inject<MainMenuFragment>()
-    private val teamListFragment by inject<TeamListFragment>()
+    private val teamListFragment by inject<PostListFragment>()
 
     private lateinit var bottomSheet: BottomSheetBehavior<*>
 

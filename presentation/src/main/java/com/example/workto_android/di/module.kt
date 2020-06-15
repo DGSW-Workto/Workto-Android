@@ -24,6 +24,7 @@ import com.example.data.post.PostApi
 import com.example.data.post.PostListMapper
 import com.example.data.post.PostRemoteDataSource
 import com.example.data.post.PostRepositoryImpl
+import com.example.domain.post.GetPostListUseCase
 import com.example.domain.post.PostRepository
 import com.example.domain.token.CheckTokenUseCase
 import com.example.domain.token.GetTokenUseCase
@@ -35,7 +36,7 @@ import com.example.workto_android.ui.login.JoinViewModel
 import com.example.workto_android.ui.login.LoginViewModel
 import com.example.workto_android.ui.main.MainMenuFragment
 import com.example.workto_android.ui.main.MainViewModel
-import com.example.workto_android.ui.main.TeamListFragment
+import com.example.workto_android.ui.main.PostListFragment
 import com.example.workto_android.ui.splash.SplashViewModel
 import com.example.workto_android.util.BASE_URL
 import okhttp3.OkHttpClient
@@ -106,13 +107,14 @@ val useCaseModule = module {
     factory { CheckTokenUseCase(get()) }
     factory { GetNetworkStateUseCase(get()) }
     factory { GetUserDataUseCase(get()) }
+    factory { GetPostListUseCase(get()) }
 }
 
 val viewModelModule = module {
     factory { LoginViewModel(get(), get()) }
     factory { JoinViewModel(get()) }
     factory { SplashViewModel(get(), get(), get()) }
-    factory { MainViewModel(get()) }
+    factory { MainViewModel(get(), get()) }
 }
 
 
@@ -123,7 +125,7 @@ val dbModule = module {
 
 val fragmentModule = module {
     factory { MainMenuFragment() }
-    factory { TeamListFragment() }
+    factory { PostListFragment() }
 }
 
 
