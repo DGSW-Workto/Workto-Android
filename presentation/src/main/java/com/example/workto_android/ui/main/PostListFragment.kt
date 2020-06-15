@@ -80,12 +80,8 @@ fun setPostItem(recyclerView: RecyclerView, postData: PostData?) {
         postAdapter = recyclerView.adapter as PostAdapter
 
     postData?.let {
-        if (postData.posts.isEmpty()) {
-            postAdapter.canLoadMore = false
-        } else {
-            postAdapter.canLoadMore = true
-            postAdapter.postList = postData.posts
-        }
+        postAdapter.canLoadMore = postData.next_page != 0
+        postAdapter.postList = postData.posts
         postAdapter.nextPage = postData.next_page
         postAdapter.notifyDataSetChanged()
     }

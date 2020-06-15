@@ -4,5 +4,5 @@ data class PostData(
     val posts: ArrayList<Post>,
     val images: ArrayList<PostImage?>,
     val next_page: Int,
-    val is_last: Boolean
+    var is_last: Boolean
 )

@@ -1,6 +1,7 @@
 package com.example.workto_android.di
 
 import com.example.data.CommonMessageMapper
+import com.example.data.DateTimeConverter
 import com.example.data.SharedPreferenceStorage
 import com.example.data.login.LoginApi
 import com.example.data.login.LoginDataMapper
@@ -89,7 +90,8 @@ val mapperModule = module {
     factory { LoginDataMapper() }
     factory { TokenDataMapper() }
     factory { UserDataMapper() }
-    factory { PostListMapper() }
+    factory { PostListMapper(get()) }
+    factory { DateTimeConverter() }
 }
 
 val repositoryModule = module {

@@ -30,7 +30,7 @@ abstract class SingleUseCase<T, R>() {
                     is SocketTimeoutException, is SocketException, is ConnectException -> result.value =
                         Result.Error("network")
                     is EmptyResultSetException -> result.value = Result.Error("no such table")
-                    else -> result.value = Result.Error("token")
+                    is TokenException -> result.value = Result.Error("token")
                 }
             })
     }

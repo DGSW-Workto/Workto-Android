@@ -7,16 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import com.example.domain.post.GetPostListUseCase
 import com.example.domain.result.Event
 import com.example.domain.user.GetUserDataUseCase
-import com.example.model.Category
-import com.example.model.Post
-import com.example.model.PostData
-import com.example.model.UserData
+import com.example.model.*
 import com.example.workto_android.R
 import com.example.workto_android.ui.BaseViewModel
 import com.example.workto_android.util.CategorySelector
 import com.example.workto_android.util.UserDataManager
 
-class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase, private val getPostListUseCase: GetPostListUseCase) : BaseViewModel(),
+class MainViewModel(
+    private val getUserDataUseCase: GetUserDataUseCase,
+    private val getPostListUseCase: GetPostListUseCase
+) : BaseViewModel(),
     CategorySelector {
 
     val searchWord = ObservableField("")
@@ -67,7 +67,7 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase, private 
     private val allPostList = ArrayList<Post>()
 
     private val _postList = MediatorLiveData<PostData>()
-    val postList:LiveData<PostData>
+    val postList: LiveData<PostData>
         get() = _postList
 
     private val getPostListResult = getPostListUseCase.observe()
@@ -90,6 +90,7 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase, private 
             allPostList.addAll(it.data.posts)
             it.data.posts.clear()
             it.data.posts.addAll(allPostList)
+            it.data.is_last = it.data.posts.isEmpty()
             _postList.value = it.data!!
         }
 
@@ -122,6 +123,10 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase, private 
 
     fun executeSearch(page: Int) {
         _bottomSheetState.value = false
+        if (page == 1) {
+            allPostList.clear()
+            _postList.value = PostData(allPostList, arrayListOf(), 2, false)
+        }
         this(getPostListUseCase(page))
     }
 
