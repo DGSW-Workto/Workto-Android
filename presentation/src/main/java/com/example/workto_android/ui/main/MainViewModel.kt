@@ -48,7 +48,7 @@ class MainViewModel(private val getUserDataUseCase: GetUserDataUseCase) : BaseVi
         get() = _navigateToMyPost
 
     private val _bottomSheetState = MutableLiveData<Boolean>(false)
-    val bottomSheetState : LiveData<Boolean>
+    val bottomSheetState: LiveData<Boolean>
         get() = _bottomSheetState
 
     private val _selectedCategory = MutableLiveData<Pair<Int, ArrayList<Category>>>()

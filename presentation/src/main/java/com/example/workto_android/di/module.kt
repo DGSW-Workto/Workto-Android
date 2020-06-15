@@ -1,7 +1,5 @@
 package com.example.workto_android.di
 
-import android.util.Log
-import androidx.room.Room
 import com.example.data.CommonMessageMapper
 import com.example.data.SharedPreferenceStorage
 import com.example.data.login.LoginApi
@@ -22,6 +20,11 @@ import com.example.domain.login.JoinUseCase
 import com.example.domain.login.LoginUseCase
 import com.example.domain.network.GetNetworkStateUseCase
 import com.example.domain.network.NetworkManager
+import com.example.data.post.PostApi
+import com.example.data.post.PostListMapper
+import com.example.data.post.PostRemoteDataSource
+import com.example.data.post.PostRepositoryImpl
+import com.example.domain.post.PostRepository
 import com.example.domain.token.CheckTokenUseCase
 import com.example.domain.token.GetTokenUseCase
 import com.example.domain.token.SaveTokenUseCase
@@ -32,6 +35,7 @@ import com.example.workto_android.ui.login.JoinViewModel
 import com.example.workto_android.ui.login.LoginViewModel
 import com.example.workto_android.ui.main.MainMenuFragment
 import com.example.workto_android.ui.main.MainViewModel
+import com.example.workto_android.ui.main.TeamListFragment
 import com.example.workto_android.ui.splash.SplashViewModel
 import com.example.workto_android.util.BASE_URL
 import okhttp3.OkHttpClient
@@ -63,18 +67,20 @@ val retrofit: Retrofit = Retrofit
 private val loginApi = retrofit.create(LoginApi::class.java)
 private val tokenAPi = retrofit.create(TokenApi::class.java)
 private val userApi = retrofit.create(UserApi::class.java)
-
+private val postApi = retrofit.create(PostApi::class.java)
 
 val networkModule = module {
     factory { loginApi }
     factory { tokenAPi }
     factory { userApi }
+    factory { postApi }
 }
 
 val dataSourceModule = module {
     factory { LoginRemoteDataSource(get()) }
     factory { TokenRemoteDataSource(get()) }
     factory { UserRemoteDataSource(get()) }
+    factory { PostRemoteDataSource(get()) }
 }
 
 val mapperModule = module {
@@ -82,12 +88,14 @@ val mapperModule = module {
     factory { LoginDataMapper() }
     factory { TokenDataMapper() }
     factory { UserDataMapper() }
+    factory { PostListMapper() }
 }
 
 val repositoryModule = module {
     factory<LoginRepository> { LoginRepositoryImpl(get(), get(), get()) }
     factory<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     factory<UserRepository> { UserRepositoryImpl(get(), get()) }
+    factory<PostRepository> { PostRepositoryImpl(get(),get()) }
 }
 
 val useCaseModule = module {
@@ -115,6 +123,7 @@ val dbModule = module {
 
 val fragmentModule = module {
     factory { MainMenuFragment() }
+    factory { TeamListFragment() }
 }
 
 

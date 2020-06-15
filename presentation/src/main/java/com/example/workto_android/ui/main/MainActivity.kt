@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.domain.result.EventObserver
@@ -30,6 +31,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainMenuFragment by inject<MainMenuFragment>()
+    private val teamListFragment by inject<TeamListFragment>()
 
     private lateinit var bottomSheet: BottomSheetBehavior<*>
 
@@ -40,6 +42,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 viewModel = this@MainActivity.viewModel
                 lifecycleOwner = this@MainActivity
             }
+
+        showFragment(teamListFragment)
 
         bottomSheet = BottomSheetBehavior.from(binding.searchHolder)
 
@@ -92,6 +96,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
             bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
         else
             super.onBackPressed()
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(binding.fragmentHolder.id, fragment).commitAllowingStateLoss()
     }
 
 }
