@@ -7,6 +7,7 @@ import com.example.data.login.LoginApi
 import com.example.data.login.LoginDataMapper
 import com.example.data.login.LoginRemoteDataSource
 import com.example.data.login.LoginRepositoryImpl
+import com.example.data.post.*
 import com.example.data.token.TokenApi
 import com.example.data.token.TokenDataMapper
 import com.example.data.token.TokenRemoteDataSource
@@ -21,14 +22,11 @@ import com.example.domain.login.JoinUseCase
 import com.example.domain.login.LoginUseCase
 import com.example.domain.network.GetNetworkStateUseCase
 import com.example.domain.network.NetworkManager
-import com.example.data.post.PostApi
-import com.example.data.post.PostListMapper
-import com.example.data.post.PostRemoteDataSource
-import com.example.data.post.PostRepositoryImpl
 import com.example.data.team.TeamApi
 import com.example.data.team.TeamListMapper
 import com.example.data.team.TeamRemoteDataSource
 import com.example.data.team.TeamRepositoryImpl
+import com.example.domain.post.GetPostDetailUseCase
 import com.example.domain.post.GetPostListUseCase
 import com.example.domain.post.PostRepository
 import com.example.domain.team.GetTeamListUseCase
@@ -45,6 +43,7 @@ import com.example.workto_android.ui.main.MainMenuFragment
 import com.example.workto_android.ui.main.MainViewModel
 import com.example.workto_android.ui.main.PostListFragment
 import com.example.workto_android.ui.main.TeamListFragment
+import com.example.workto_android.ui.post.PostDetailViewModel
 import com.example.workto_android.ui.splash.SplashViewModel
 import com.example.workto_android.util.BASE_URL
 import okhttp3.OkHttpClient
@@ -103,13 +102,14 @@ val mapperModule = module {
     factory { PostListMapper(get()) }
     factory { DateTimeConverter() }
     factory { TeamListMapper() }
+    factory { PostDetailMapper(get()) }
 }
 
 val repositoryModule = module {
     factory<LoginRepository> { LoginRepositoryImpl(get(), get(), get()) }
     factory<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     factory<UserRepository> { UserRepositoryImpl(get(), get()) }
-    factory<PostRepository> { PostRepositoryImpl(get(),get()) }
+    factory<PostRepository> { PostRepositoryImpl(get(),get(), get()) }
     factory<TeamRepository> { TeamRepositoryImpl(get(), get()) }
 }
 
@@ -123,6 +123,7 @@ val useCaseModule = module {
     factory { GetUserDataUseCase(get()) }
     factory { GetPostListUseCase(get()) }
     factory { GetTeamListUseCase(get()) }
+    factory { GetPostDetailUseCase(get()) }
 }
 
 val viewModelModule = module {
@@ -130,6 +131,7 @@ val viewModelModule = module {
     factory { JoinViewModel(get()) }
     factory { SplashViewModel(get(), get(), get()) }
     factory { MainViewModel(get(), get(),get()) }
+    factory { PostDetailViewModel(get()) }
 }
 
 

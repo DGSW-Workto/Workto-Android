@@ -1,5 +1,6 @@
 package com.example.workto_android.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.example.model.PostData
 import com.example.workto_android.R
 import com.example.workto_android.databinding.FragmentPostListBinding
 import com.example.workto_android.ui.BaseFragment
+import com.example.workto_android.ui.post.PostDetailActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -53,8 +55,8 @@ class PostListFragment : BaseFragment<MainViewModel>() {
 
     private fun initObserver() {
 
-        viewModel.postList.observe(viewLifecycleOwner, Observer {
-
+        viewModel.navigateToPostDetail.observe(viewLifecycleOwner, EventObserver {
+            activity?.startActivity(Intent(activity, PostDetailActivity::class.java).putExtra("id", it))
         })
 
         viewModel.error.observe(viewLifecycleOwner, EventObserver {
