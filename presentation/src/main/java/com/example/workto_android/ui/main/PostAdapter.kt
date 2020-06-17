@@ -7,7 +7,7 @@ import com.example.model.Post
 import com.example.workto_android.databinding.PostItemBinding
 
 class PostAdapter(private val viewModel: MainViewModel) :
-    RecyclerView.Adapter<PostAdapter.PostHolder>() {
+RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

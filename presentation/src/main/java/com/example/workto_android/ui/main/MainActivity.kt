@@ -29,7 +29,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     private lateinit var binding: ActivityMainBinding
 
     private val mainMenuFragment by inject<MainMenuFragment>()
-    private val teamListFragment by inject<PostListFragment>()
+    private val postListFragment by inject<PostListFragment>()
+    private val teamListFragment by inject<TeamListFragment>()
 
     private lateinit var bottomSheet: BottomSheetBehavior<*>
 
@@ -41,7 +42,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 lifecycleOwner = this@MainActivity
             }
 
-        showFragment(teamListFragment)
+        showFragment(postListFragment)
 
         bottomSheet = BottomSheetBehavior.from(binding.searchHolder)
 
@@ -71,6 +72,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         })
 
+        viewModel.toggleFragment.observe(this, Observer {
+            showFragment(if (it) postListFragment else teamListFragment)
+        })
+
         viewModel.navigateToCreateTeam.observe(this, EventObserver {
 
         })
@@ -97,7 +102,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     private fun showFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(binding.fragmentHolder.id, fragment).commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().replace(binding.fragmentHolder.id, fragment)
+            .commitAllowingStateLoss()
     }
 
 }

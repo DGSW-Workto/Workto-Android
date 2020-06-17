@@ -25,8 +25,14 @@ import com.example.data.post.PostApi
 import com.example.data.post.PostListMapper
 import com.example.data.post.PostRemoteDataSource
 import com.example.data.post.PostRepositoryImpl
+import com.example.data.team.TeamApi
+import com.example.data.team.TeamListMapper
+import com.example.data.team.TeamRemoteDataSource
+import com.example.data.team.TeamRepositoryImpl
 import com.example.domain.post.GetPostListUseCase
 import com.example.domain.post.PostRepository
+import com.example.domain.team.GetTeamListUseCase
+import com.example.domain.team.TeamRepository
 import com.example.domain.token.CheckTokenUseCase
 import com.example.domain.token.GetTokenUseCase
 import com.example.domain.token.SaveTokenUseCase
@@ -38,6 +44,7 @@ import com.example.workto_android.ui.login.LoginViewModel
 import com.example.workto_android.ui.main.MainMenuFragment
 import com.example.workto_android.ui.main.MainViewModel
 import com.example.workto_android.ui.main.PostListFragment
+import com.example.workto_android.ui.main.TeamListFragment
 import com.example.workto_android.ui.splash.SplashViewModel
 import com.example.workto_android.util.BASE_URL
 import okhttp3.OkHttpClient
@@ -70,12 +77,14 @@ private val loginApi = retrofit.create(LoginApi::class.java)
 private val tokenAPi = retrofit.create(TokenApi::class.java)
 private val userApi = retrofit.create(UserApi::class.java)
 private val postApi = retrofit.create(PostApi::class.java)
+private val teamApi = retrofit.create(TeamApi::class.java)
 
 val networkModule = module {
     factory { loginApi }
     factory { tokenAPi }
     factory { userApi }
     factory { postApi }
+    factory { teamApi }
 }
 
 val dataSourceModule = module {
@@ -83,6 +92,7 @@ val dataSourceModule = module {
     factory { TokenRemoteDataSource(get()) }
     factory { UserRemoteDataSource(get()) }
     factory { PostRemoteDataSource(get()) }
+    factory { TeamRemoteDataSource(get()) }
 }
 
 val mapperModule = module {
@@ -92,6 +102,7 @@ val mapperModule = module {
     factory { UserDataMapper() }
     factory { PostListMapper(get()) }
     factory { DateTimeConverter() }
+    factory { TeamListMapper() }
 }
 
 val repositoryModule = module {
@@ -99,6 +110,7 @@ val repositoryModule = module {
     factory<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
     factory<UserRepository> { UserRepositoryImpl(get(), get()) }
     factory<PostRepository> { PostRepositoryImpl(get(),get()) }
+    factory<TeamRepository> { TeamRepositoryImpl(get(), get()) }
 }
 
 val useCaseModule = module {
@@ -110,13 +122,14 @@ val useCaseModule = module {
     factory { GetNetworkStateUseCase(get()) }
     factory { GetUserDataUseCase(get()) }
     factory { GetPostListUseCase(get()) }
+    factory { GetTeamListUseCase(get()) }
 }
 
 val viewModelModule = module {
     factory { LoginViewModel(get(), get()) }
     factory { JoinViewModel(get()) }
     factory { SplashViewModel(get(), get(), get()) }
-    factory { MainViewModel(get(), get()) }
+    factory { MainViewModel(get(), get(),get()) }
 }
 
 
@@ -128,6 +141,7 @@ val dbModule = module {
 val fragmentModule = module {
     factory { MainMenuFragment() }
     factory { PostListFragment() }
+    factory { TeamListFragment() }
 }
 
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.domain.post.GetPostListUseCase
 import com.example.domain.result.Event
+import com.example.domain.team.GetTeamListUseCase
 import com.example.domain.user.GetUserDataUseCase
 import com.example.model.*
 import com.example.workto_android.R
@@ -15,11 +16,19 @@ import com.example.workto_android.util.UserDataManager
 
 class MainViewModel(
     private val getUserDataUseCase: GetUserDataUseCase,
-    private val getPostListUseCase: GetPostListUseCase
+    private val getPostListUseCase: GetPostListUseCase,
+    private val getTeamListUseCase: GetTeamListUseCase
 ) : BaseViewModel(),
     CategorySelector {
 
+    private val isTeamSearchMode: Boolean
+        get() = _searchByTeam.value ?: false
+
     val searchWord = ObservableField("")
+
+    private val _toggleFragment = MutableLiveData<Boolean>(true) //true: post / false: team
+    val toggleFragment: LiveData<Boolean>
+        get() = _toggleFragment
 
     private val _userData = MediatorLiveData<UserData>()
     val userData: LiveData<UserData>
@@ -53,6 +62,10 @@ class MainViewModel(
     val navigateToPostDetail: LiveData<Event<Int>>
         get() = _navigateToPostDetail
 
+    private val _navigateToTeamDetail = MutableLiveData<Event<Int>>()
+    val navigateToTeamDetail: LiveData<Event<Int>>
+        get() = _navigateToTeamDetail
+
     private val _bottomSheetState = MutableLiveData<Boolean>(false)
     val bottomSheetState: LiveData<Boolean>
         get() = _bottomSheetState
@@ -70,7 +83,14 @@ class MainViewModel(
     val postList: LiveData<PostData>
         get() = _postList
 
+    private val allTeamList = ArrayList<Team>()
+
+    private val _teamList = MediatorLiveData<TeamData>()
+    val teamList: LiveData<TeamData>
+        get() = _teamList
+
     private val getPostListResult = getPostListUseCase.observe()
+    private val getTeamListResult = getTeamListUseCase.observe()
 
     init {
         executeSearch(1)
@@ -90,17 +110,31 @@ class MainViewModel(
             allPostList.addAll(it.data.posts)
             it.data.posts.clear()
             it.data.posts.addAll(allPostList)
-            it.data.is_last = it.data.posts.isEmpty()
-            _postList.value = it.data!!
+            _postList.value = it.data
         }
 
         getPostListResult.onError(_error) {
+            _error.value = Event(it)
+        }
+
+        getTeamListResult.onSuccess(_teamList) {
+            allTeamList.addAll(it.data.rows)
+            it.data.rows.clear()
+            it.data.rows.addAll(allTeamList)
+            _teamList.value = it.data
+        }
+
+        getTeamListResult.onError(_error) {
             _error.value = Event(it)
         }
     }
 
     fun navigateToPostDetail(id: Int) {
         _navigateToPostDetail.value = Event(id)
+    }
+
+    fun navigateToTeamDetail(id: Int) {
+        _navigateToTeamDetail.value = Event(id)
     }
 
     fun openSearchHolder() {
@@ -125,9 +159,18 @@ class MainViewModel(
         _bottomSheetState.value = false
         if (page == 1) {
             allPostList.clear()
-            _postList.value = PostData(allPostList, arrayListOf(), 2, false)
+            allTeamList.clear()
+            _postList.value = PostData(allPostList, arrayListOf(), 2)
+            _teamList.value = TeamData(allTeamList, 2)
         }
-        this(getPostListUseCase(page))
+
+        if (isTeamSearchMode) {
+            this(getTeamListUseCase(Pair(0, page)))
+        } else {
+            this(getPostListUseCase(page))
+        }
+
+        _toggleFragment.value = !isTeamSearchMode
     }
 
     private fun navigateTo(navigate: MutableLiveData<Event<Unit>>) {
