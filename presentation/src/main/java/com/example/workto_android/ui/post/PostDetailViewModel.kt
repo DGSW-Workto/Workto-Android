@@ -11,16 +11,17 @@ import com.example.model.PostDetail
 import com.example.model.Team
 import com.example.workto_android.ui.BaseViewModel
 
-class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase) : BaseViewModel() {
+class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase) :
+    BaseViewModel() {
 
     var isHandled = false
 
     private val _postDetail = MediatorLiveData<PostDetail>()
-    val postDetail : LiveData<PostDetail>
+    val postDetail: LiveData<PostDetail>
         get() = _postDetail
 
     private val _navigateToTeam = MutableLiveData<Event<Int>>()
-    val navigateToTeam : LiveData<Event<Int>>
+    val navigateToTeam: LiveData<Event<Int>>
         get() = _navigateToTeam
 
     private val _groupId = MutableLiveData<Int>()
@@ -35,8 +36,11 @@ class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase
         }
 
         getPostDetailResult.onSuccess(_postDetail) {
-            _postDetail.value = it.data!!.apply {
-                this.post.create_date = "마감일 : ${this.post.create_date}"
+            _postDetail.value = it.data.apply {
+                this.post.run {
+                    title = "$title (${count}명)"
+                    create_date = "등록일 : $create_date"
+                }
             }
         }
 
