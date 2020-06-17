@@ -1,5 +1,6 @@
 package com.example.workto_android.ui.post
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import com.example.domain.result.EventObserver
 import com.example.workto_android.R
 import com.example.workto_android.databinding.ActivityPostDetailBinding
 import com.example.workto_android.ui.BaseActivity
+import com.example.workto_android.ui.main.MainActivity
 import com.example.workto_android.util.BASE_URL
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,6 +21,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PostDetailActivity : BaseActivity<PostDetailViewModel>() {
     override val viewModel: PostDetailViewModel by viewModel()
     private lateinit var binding: ActivityPostDetailBinding
+
+    private val fromTeam: Boolean by lazy {
+        intent.getBooleanExtra("fromTeam", false)
+    }
 
     private val groupId: Int? by lazy {
         val id = intent.getIntExtra("id", -1)
@@ -58,6 +64,13 @@ class PostDetailActivity : BaseActivity<PostDetailViewModel>() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
+        })
+
+        viewModel.navigateToTeam.observe(this, EventObserver {
+            if (fromTeam)
+                finish()
+            //else
+            //startActivity(Intent(this, ::class.java))
         })
     }
 

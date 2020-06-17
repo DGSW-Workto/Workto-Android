@@ -19,6 +19,10 @@ class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase
     val postDetail : LiveData<PostDetail>
         get() = _postDetail
 
+    private val _navigateToTeam = MutableLiveData<Event<Int>>()
+    val navigateToTeam : LiveData<Event<Int>>
+        get() = _navigateToTeam
+
     private val _groupId = MutableLiveData<Int>()
 
     private val getPostDetailResult = getPostDetailUseCase.observe()
@@ -31,12 +35,18 @@ class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase
         }
 
         getPostDetailResult.onSuccess(_postDetail) {
-            _postDetail.value = it.data!!
+            _postDetail.value = it.data!!.apply {
+                this.post.create_date = "마감일 : ${this.post.create_date}"
+            }
         }
 
         getPostDetailResult.onError(_error) {
             _error.value = Event(it)
         }
+    }
+
+    fun navigateToTeam(id: Int) {
+        _navigateToTeam.value = Event(id)
     }
 
     fun setGroupId(id: Int) {
