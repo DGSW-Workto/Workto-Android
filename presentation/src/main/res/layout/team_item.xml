@@ -28,6 +28,7 @@
             android:id="@+id/holder_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/main_menu_item_background"
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{() -> viewModel.navigateToTeamDetail(item.group_id)}">
