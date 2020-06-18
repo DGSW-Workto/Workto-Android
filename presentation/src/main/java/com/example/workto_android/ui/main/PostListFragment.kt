@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.result.EventObserver
-import com.example.model.PostData
+import com.example.model.PostListData
 
 import com.example.workto_android.R
 import com.example.workto_android.databinding.FragmentPostListBinding
@@ -73,7 +72,7 @@ class PostListFragment : BaseFragment<MainViewModel>() {
 }
 
 @BindingAdapter("post_item")
-fun setPostItem(recyclerView: RecyclerView, postData: PostData?) {
+fun setPostItem(recyclerView: RecyclerView, postListData: PostListData?) {
     val postAdapter: PostAdapter
 
     if (recyclerView.adapter == null)
@@ -81,10 +80,10 @@ fun setPostItem(recyclerView: RecyclerView, postData: PostData?) {
     else
         postAdapter = recyclerView.adapter as PostAdapter
 
-    postData?.let {
-        postAdapter.canLoadMore = postData.next_page != 0
-        postAdapter.postList = postData.posts
-        postAdapter.nextPage = postData.next_page
+    postListData?.let {
+        postAdapter.canLoadMore = postListData.next_page != 0
+        postAdapter.postList = postListData.post
+        postAdapter.nextPage = postListData.next_page
         postAdapter.notifyDataSetChanged()
     }
 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.model.Post
+import com.example.model.PostData
 import com.example.workto_android.databinding.PostItemBinding
 
 class PostAdapter(private val viewModel: MainViewModel) :
@@ -11,13 +12,13 @@ RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Post) {
+        fun bind(item: PostData) {
             binding.item = item
         }
     }
 
     var nextPage = 0
-    var postList = ArrayList<Post>()
+    var postList = ArrayList<PostData>()
     var canLoadMore = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PostHolder(

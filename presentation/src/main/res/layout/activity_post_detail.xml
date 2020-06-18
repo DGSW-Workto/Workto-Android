@@ -32,7 +32,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     app:layout_collapseMode="parallax"
-                    app:url="@{viewModel.postDetail.images.image_path}" />
+                    app:url="@{viewModel.postDetail.image.image_path}" />
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -61,7 +61,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="@{viewModel.postDetail.post.title}"
+                    android:text="@{viewModel.postDetail.info.title}"
                     android:textColor="#000000"
                     android:textSize="20dp"
                     app:layout_constraintTop_toTopOf="parent"
@@ -74,7 +74,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
-                    android:text="@{viewModel.postDetail.post.content}"
+                    android:text="@{viewModel.postDetail.info.content}"
                     android:textSize="18dp"
                     app:layout_constraintTop_toBottomOf="@+id/text_view_title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="15dp"
-                android:text="@{viewModel.postDetail.post.create_date}"
+                android:text="@{viewModel.postDetail.info.create_date}"
                 android:textColor="#000000"
                 android:textSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,7 +110,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="14dp"
                 android:backgroundTint="#F4E9E9"
-                android:onClick="@{() -> viewModel.navigateToTeam(viewModel.postDetail.post.group_id)}"
+                android:onClick="@{() -> viewModel.navigateToTeam(viewModel.postDetail.info.group_id)}"
                 android:paddingStart="50dp"
                 android:paddingTop="12dp"
                 android:paddingEnd="50dp"

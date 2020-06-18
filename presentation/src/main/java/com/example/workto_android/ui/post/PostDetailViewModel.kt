@@ -7,17 +7,17 @@ import androidx.lifecycle.Transformations
 import com.example.domain.post.GetPostDetailUseCase
 import com.example.domain.result.Event
 import com.example.model.Post
-import com.example.model.PostDetail
+import com.example.model.PostData
 import com.example.model.Team
 import com.example.workto_android.ui.BaseViewModel
 
 class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase) :
     BaseViewModel() {
 
-    var isHandled = false
+    private var isHandled = false
 
-    private val _postDetail = MediatorLiveData<PostDetail>()
-    val postDetail: LiveData<PostDetail>
+    private val _postDetail = MediatorLiveData<PostData>()
+    val postDetail: LiveData<PostData>
         get() = _postDetail
 
     private val _navigateToTeam = MutableLiveData<Event<Int>>()
@@ -36,8 +36,8 @@ class PostDetailViewModel(private val getPostDetailUseCase: GetPostDetailUseCase
         }
 
         getPostDetailResult.onSuccess(_postDetail) {
-            _postDetail.value = it.data.apply {
-                this.post.run {
+            _postDetail.value = it.data.post.apply {
+                this.info.run {
                     title = "$title (${count}명)"
                     create_date = "등록일 : $create_date"
                 }

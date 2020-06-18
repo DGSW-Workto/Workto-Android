@@ -9,7 +9,6 @@ import com.example.domain.result.Event
 import com.example.domain.team.GetTeamListUseCase
 import com.example.domain.user.GetUserDataUseCase
 import com.example.model.*
-import com.example.workto_android.R
 import com.example.workto_android.ui.BaseViewModel
 import com.example.workto_android.util.CategorySelector
 import com.example.workto_android.util.UserDataManager
@@ -77,10 +76,10 @@ class MainViewModel(
     private val allSelectedCategory = arrayListOf<Category>()
     val categoryList: ArrayList<Category> = Category.values().toCollection(ArrayList())
 
-    private val allPostList = ArrayList<Post>()
+    private val allPostList = ArrayList<PostData>()
 
-    private val _postList = MediatorLiveData<PostData>()
-    val postList: LiveData<PostData>
+    private val _postList = MediatorLiveData<PostListData>()
+    val postListList: LiveData<PostListData>
         get() = _postList
 
     private val allTeamList = ArrayList<Team>()
@@ -99,7 +98,7 @@ class MainViewModel(
 
         getUserDataUseCase.observe().onSuccess(_userData) {
             UserDataManager.userData = it.data
-            _userData.value = it.data!!
+            _userData.value = it.data
         }
 
         getUserDataUseCase.observe().onError(_error) {
@@ -107,9 +106,9 @@ class MainViewModel(
         }
 
         getPostListResult.onSuccess(_postList) {
-            allPostList.addAll(it.data.posts)
-            it.data.posts.clear()
-            it.data.posts.addAll(allPostList)
+            allPostList.addAll(it.data.post)
+            it.data.post.clear()
+            it.data.post.addAll(allPostList)
             _postList.value = it.data
         }
 
@@ -160,7 +159,7 @@ class MainViewModel(
         if (page == 1) {
             allPostList.clear()
             allTeamList.clear()
-            _postList.value = PostData(allPostList, arrayListOf(), 2)
+            _postList.value = PostListData(arrayListOf(),2)
             _teamList.value = TeamData(allTeamList, 2)
         }
 
