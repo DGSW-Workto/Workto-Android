@@ -1,5 +1,6 @@
 package com.example.workto_android.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,8 @@ import com.example.model.TeamData
 import com.example.workto_android.R
 import com.example.workto_android.databinding.FragmentTeamListBinding
 import com.example.workto_android.ui.BaseFragment
+import com.example.workto_android.ui.post.PostDetailActivity
+import com.example.workto_android.ui.team.TeamActivity
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -47,6 +50,11 @@ class TeamListFragment : BaseFragment<MainViewModel>() {
     }
 
     private fun initObserver() {
+
+        viewModel.navigateToTeamDetail.observe(viewLifecycleOwner, EventObserver {
+            activity?.startActivity(Intent(activity, TeamActivity::class.java).putExtra("group_id", it))
+        })
+
         viewModel.error.observe(viewLifecycleOwner, EventObserver{
             when (it) {
                 "network" -> Snackbar.make(

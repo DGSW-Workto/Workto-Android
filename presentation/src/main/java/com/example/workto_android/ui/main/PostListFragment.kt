@@ -70,20 +70,3 @@ class PostListFragment : BaseFragment<MainViewModel>() {
     }
 
 }
-
-@BindingAdapter("post_item")
-fun setPostItem(recyclerView: RecyclerView, postListData: PostListData?) {
-    val postAdapter: PostAdapter
-
-    if (recyclerView.adapter == null)
-        return
-    else
-        postAdapter = recyclerView.adapter as PostAdapter
-
-    postListData?.let {
-        postAdapter.canLoadMore = postListData.next_page != 0
-        postAdapter.postList = postListData.post
-        postAdapter.nextPage = postListData.next_page
-        postAdapter.notifyDataSetChanged()
-    }
-}

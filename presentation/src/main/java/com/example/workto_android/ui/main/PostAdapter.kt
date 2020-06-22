@@ -3,11 +3,11 @@ package com.example.workto_android.ui.main
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.model.Post
 import com.example.model.PostData
 import com.example.workto_android.databinding.PostItemBinding
+import com.example.workto_android.util.PostHelper
 
-class PostAdapter(private val viewModel: MainViewModel) :
+class PostAdapter(private val postHelper: PostHelper) :
 RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(private val binding: PostItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -25,7 +25,7 @@ RecyclerView.Adapter<PostAdapter.PostHolder>() {
         PostItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         ).apply {
-            viewModel = this@PostAdapter.viewModel
+            postHelper = this@PostAdapter.postHelper
         }
     )
 
@@ -35,7 +35,7 @@ RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
         if (position >= postList.size - 1 && canLoadMore) {
             canLoadMore = false
-            viewModel.executeSearch(nextPage)
+            postHelper.executeSearch(nextPage)
         }
 
         holder.bind(postList[position])

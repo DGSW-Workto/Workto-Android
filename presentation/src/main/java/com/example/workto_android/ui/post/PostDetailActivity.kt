@@ -14,6 +14,7 @@ import com.example.workto_android.R
 import com.example.workto_android.databinding.ActivityPostDetailBinding
 import com.example.workto_android.ui.BaseActivity
 import com.example.workto_android.ui.main.MainActivity
+import com.example.workto_android.ui.team.TeamActivity
 import com.example.workto_android.util.BASE_URL
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -69,8 +70,8 @@ class PostDetailActivity : BaseActivity<PostDetailViewModel>() {
         viewModel.navigateToTeam.observe(this, EventObserver {
             if (fromTeam)
                 finish()
-            //else
-            //startActivity(Intent(this, ::class.java))
+            else
+                startActivity(Intent(this, TeamActivity::class.java).putExtra("group_id", it))
         })
     }
 

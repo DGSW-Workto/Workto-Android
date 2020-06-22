@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.example.workto_android.ui.main.MainViewModel" />
+            name="postHelper"
+            type="com.example.workto_android.util.PostHelper" />
 
         <variable
             name="item"
@@ -30,7 +30,7 @@
             android:background="@drawable/main_menu_item_background"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> viewModel.navigateToPostDetail(item.info.post_id)}"
+            android:onClick="@{() -> postHelper.selectPost(item.info.post_id)}"
             android:paddingStart="13dp"
             android:paddingEnd="13dp">
 

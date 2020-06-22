@@ -11,6 +11,7 @@ import com.example.domain.user.GetUserDataUseCase
 import com.example.model.*
 import com.example.workto_android.ui.BaseViewModel
 import com.example.workto_android.util.CategorySelector
+import com.example.workto_android.util.PostHelper
 import com.example.workto_android.util.UserDataManager
 
 class MainViewModel(
@@ -18,7 +19,7 @@ class MainViewModel(
     private val getPostListUseCase: GetPostListUseCase,
     private val getTeamListUseCase: GetTeamListUseCase
 ) : BaseViewModel(),
-    CategorySelector {
+    CategorySelector, PostHelper {
 
     private val isTeamSearchMode: Boolean
         get() = _searchByTeam.value ?: false
@@ -79,7 +80,7 @@ class MainViewModel(
     private val allPostList = ArrayList<PostData>()
 
     private val _postList = MediatorLiveData<PostListData>()
-    val postListList: LiveData<PostListData>
+    val postList: LiveData<PostListData>
         get() = _postList
 
     private val allTeamList = ArrayList<Team>()
@@ -98,7 +99,7 @@ class MainViewModel(
 
         getUserDataUseCase.observe().onSuccess(_userData) {
             UserDataManager.userData = it.data
-            _userData.value = it.data
+            _userData.value = it.data!!
         }
 
         getUserDataUseCase.observe().onError(_error) {
@@ -128,10 +129,6 @@ class MainViewModel(
         }
     }
 
-    fun navigateToPostDetail(id: Int) {
-        _navigateToPostDetail.value = Event(id)
-    }
-
     fun navigateToTeamDetail(id: Int) {
         _navigateToTeamDetail.value = Event(id)
     }
@@ -154,24 +151,6 @@ class MainViewModel(
         }
     }
 
-    fun executeSearch(page: Int) {
-        _bottomSheetState.value = false
-        if (page == 1) {
-            allPostList.clear()
-            allTeamList.clear()
-            _postList.value = PostListData(arrayListOf(),2)
-            _teamList.value = TeamData(allTeamList, 2)
-        }
-
-        if (isTeamSearchMode) {
-            this(getTeamListUseCase(Pair(0, page)))
-        } else {
-            this(getPostListUseCase(page))
-        }
-
-        _toggleFragment.value = !isTeamSearchMode
-    }
-
     private fun navigateTo(navigate: MutableLiveData<Event<Unit>>) {
         navigate.value = Event(Unit)
     }
@@ -188,6 +167,28 @@ class MainViewModel(
 
         val position = categoryList.indexOf(category)
         _selectedCategory.value = Pair(position, allSelectedCategory)
+    }
+
+    override fun selectPost(id: Int) {
+        _navigateToPostDetail.value = Event(id)
+    }
+
+    override fun executeSearch(page: Int) {
+        _bottomSheetState.value = false
+        if (page == 1) {
+            allPostList.clear()
+            allTeamList.clear()
+            _postList.value = PostListData(arrayListOf(),2)
+            _teamList.value = TeamData(allTeamList, 2)
+        }
+
+        if (isTeamSearchMode) {
+            this(getTeamListUseCase(Pair(0, page)))
+        } else {
+            this(getPostListUseCase(page))
+        }
+
+        _toggleFragment.value = !isTeamSearchMode
     }
 
 }

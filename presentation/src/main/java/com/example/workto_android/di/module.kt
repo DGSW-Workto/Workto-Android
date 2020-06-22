@@ -133,7 +133,7 @@ val viewModelModule = module {
     factory { SplashViewModel(get(), get(), get()) }
     factory { MainViewModel(get(), get(),get()) }
     factory { PostDetailViewModel(get()) }
-    factory { TeamViewModel(get() }
+    factory { TeamViewModel(get(), get()) }
 }
 
 
