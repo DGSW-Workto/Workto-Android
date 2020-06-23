@@ -37,6 +37,15 @@ abstract class BaseViewModel() : ViewModel() {
         }
     }
 
+    fun <T, R> MutableLiveData<Result<R>>.onSuccess(observer: MediatorLiveData<T>) {
+        observer.addSource(this) {
+            if (it is Result.Success) {
+                this.value = it
+            }
+        }
+    }
+
+
     fun <T, R> MutableLiveData<Result<R>>.onError(
         observer: MediatorLiveData<Event<T>>,
         onError: (result: String) -> Unit

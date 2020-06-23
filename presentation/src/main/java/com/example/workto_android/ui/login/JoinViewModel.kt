@@ -55,7 +55,13 @@ class JoinViewModel(private val joinUseCase: JoinUseCase) : BaseViewModel(), Cat
     val completeJoin: LiveData<Event<Unit>>
         get() = _completeJoin
 
+    private val _test = MediatorLiveData<Result<Event<Unit>>>()
+    val test : LiveData<Result<Event<Unit>>>
+        get() = _test
+
     init {
+        //joinResult.onSuccess(_test)
+
         joinResult.onSuccess(_completeJoin) {
             _completeJoin.value = Event(Unit)
         }
