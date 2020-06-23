@@ -43,6 +43,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
         viewModel.completeLogin.observe(this, EventObserver{
             makeToast("로그인 성공", false)
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
         })
     }
 
