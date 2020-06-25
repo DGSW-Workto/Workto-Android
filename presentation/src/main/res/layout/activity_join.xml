@@ -10,10 +10,11 @@
             type="com.example.workto_android.ui.login.JoinViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:id="@+id/join_holder_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/activity_join_xml_join_holder_layout_scene">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -178,5 +179,5 @@
             android:text="@{viewModel.buttonText}"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="다음" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
